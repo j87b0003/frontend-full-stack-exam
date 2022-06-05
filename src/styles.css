@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+li.nav-item a {
+  color: #9e9e9e
+}
+
+.custom-file-label::after {
+  font-family: feather !important;
+  content: "\e87c";
+}
+
+input.custom-file-input:hover {
+  cursor: pointer;
+}
+
+.require {
+  color: #975AFF
+}
+
+tag {
+  background: #efdeff !important;
+  color: #975aff !important;
+  border-radius: .35rem !important;
+}
+tag svg {
+  stroke: #975aff;
+}
+.ng2-tag-input.ng2-tag-input--focused{
+  border-bottom: 2px solid #975AFF !important;
+}
+
+.checkbox-lg input.custom-control-input ~ .custom-control-label::before, 
+.checkbox-lg input.custom-control-input ~ .custom-control-label::after {
+  top: .8rem;
+  width: 1.55rem;
+  height: 1.55rem;
+}
+.checkbox-lg .custom-control-label {
+  padding-top: 13px;
+  padding-left: 6px;
+}
+.checkbox-xl input.custom-control-input ~ .custom-control-label::before, 
+.checkbox-xl input.custom-control-input ~ .custom-control-label::after {
+  top: 1.2rem;
+  width: 1.85rem;
+  height: 1.85rem;
+}
+.checkbox-xl .custom-control-label {
+  padding-top: 23px;
+  padding-left: 10px;
+}
+
+.ngb-tp-input {
+  background-color: white;
+}

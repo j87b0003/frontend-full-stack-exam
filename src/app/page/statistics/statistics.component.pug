@@ -1,0 +1,11 @@
+.row
+    .col-1
+    .col-8
+        h5 Statistics
+        ul
+            li Total number of users who have signed up: 
+                b {{ statistics.signedUpTotal }}
+            li Total number of users with active sessions today: 
+                b {{ statistics.activeSessionTotal }}
+            li Average number of active session users in the last 7 days rolling: 
+                b {{ statistics.activeSessionAverage | number: '1.0-3' }}

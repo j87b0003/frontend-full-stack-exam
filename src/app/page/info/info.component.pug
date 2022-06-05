@@ -1,0 +1,11 @@
+.row
+    .col-1
+    .col-8
+        h5 Info
+        ul(*ngIf="user")
+            li Timestamp of user sign up: 
+                b {{ user.createdtime | date: 'medium' }}
+            li Number of times logged in: 
+                b {{ user.loginCount }}
+            li Timestamp of the last user session: 
+                b {{ user.updatedtime | date: 'medium' }}

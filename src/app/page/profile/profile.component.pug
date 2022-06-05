@@ -1,0 +1,26 @@
+section.users-edit
+  .row
+    .col-12
+      .card
+        .card-content
+          .card-body
+            ul.nav-tabs(ngbNav, #nav="ngbNav")
+              li(ngbNavItem)
+                a(ngbNavLink)
+                    i.ft-lock.mr-1
+                    span Password Set
+                ng-template(ngbNavContent)
+                  form([formGroup]='form')
+                    .row
+                      .col-12.mt-1
+                        .form-group
+                          input.form-control(type='password', formControlName='oldPassword', placeholder='Enter old password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.oldPassword.invalid, "is-valid": formSubmitted && !lf.oldPassword.invalid }', required, minlength="8")
+                        .form-group
+                          input.form-control(type='password', formControlName='password', placeholder='Enter new password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.password.invalid, "is-valid": formSubmitted && !lf.password.invalid }', required, minlength="8")
+                        .form-group
+                          input.form-control(type='password', formControlName='newPassword', placeholder='Reenter new password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.newPassword.invalid || (form.value.password !== form.value.newPassword), "is-valid": formSubmitted && !lf.newPassword.invalid && (form.value.password === form.value.newPassword)}', required, minlength="8")
+                      .col-12.d-flex.flex-sm-row.flex-column.justify-content-end.mt-3.mt-sm-2
+                        app-btn-cancel((click)="reset()")
+                        app-btn-save((click)='save()', [disabled]="form.invalid")
+            div([ngbNavOutlet]="nav")
+ngx-spinner

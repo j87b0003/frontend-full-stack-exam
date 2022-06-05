@@ -1,0 +1,6 @@
+#alerts(*ngIf='show')
+  ngb-alert([type]='type', (close)='close()', class="bg-light-{{type}}")
+    i.mr-1(class="{{msg.icon}}")
+    strong.display-5 {msg.title, select, Info {Info} Warning {Warning} }
+    hr
+    p {msg.content, select, Saved {Saved} Deleted {Deleted} Copy {Copy} Null {Null} Error {Error} Other {{{msg.content}}} }

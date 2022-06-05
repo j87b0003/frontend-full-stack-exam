@@ -1,0 +1,22 @@
+section#login
+  .row.auth-height.full-height-vh.m-0
+    .col-12.d-flex.align-items-center.justify-content-center
+      .card.overflow-hidden
+        .card-content
+          .card-body.auth-img
+            .row.m-0
+              .col-lg-6.d-none.d-lg-flex.justify-content-center.align-items-center.auth-img-bg.p-3
+                img.img-fluid(src='assets/img/gallery/login.png', alt, width='300', height='230')
+              .col-lg-6.col-12.px-4.py-3.text-center
+                h3.mb-2.card-title.black Backend / Full-Stack Exam
+                h5.primary Login
+                form([formGroup]='loginForm')
+                  .form-group
+                    input.form-control(type='text', formControlName='email', placeholder='Enter your email', pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", [ngClass]='{ "is-invalid": loginFormSubmitted && lf.email.invalid, "is-valid": loginFormSubmitted && !lf.email.invalid }', required)
+                  .form-group
+                    input.form-control(type='password', formControlName='password', placeholder='Enter your password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": loginFormSubmitted && lf.password.invalid, "is-valid": loginFormSubmitted && !lf.password.invalid }', required)
+                  hr
+                  .d-flex.justify-content-between.flex-sm-row.flex-column
+                    a([routerLink]="['/pages/signup']") Sign Up
+                    a.btn.btn-primary((click)='onSubmit()') Login
+ngx-spinner
