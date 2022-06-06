@@ -23,6 +23,7 @@
               href="javascript:;" data-toggle="dropdown" ngbDropdownToggle>
               <div class="user d-md-flex d-none mr-2">
                 <span class="text-right mb-1">{{user.email}}</span>
+                <span class="text-right mb-1" *ngIf="user.name">({{user.name}})</span>
               </div>
             </a>
             <div class="dropdown-menu text-left dropdown-menu-right m-0 pb-0" aria-labelledby="dropdownBasic2"

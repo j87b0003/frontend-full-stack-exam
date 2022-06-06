@@ -1,4 +1,4 @@
-section#login
+section#signup
   .row.auth-height.full-height-vh.m-0
     .col-12.d-flex.align-items-center.justify-content-center
       .card.overflow-hidden
@@ -10,13 +10,37 @@ section#login
               .col-lg-6.col-12.px-4.py-3.text-center
                 h3.mb-2.card-title.black Backend / Full-Stack Exam
                 h5.primary Sign Up
-                form([formGroup]='loginForm')
+                form([formGroup]='signupForm')
                   .form-group
-                    input.form-control(type='text', formControlName='email', placeholder='Enter your email', pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", [ngClass]='{ "is-invalid": loginFormSubmitted && lf.email.invalid, "is-valid": loginFormSubmitted && !lf.email.invalid }', required)
+                    input.form-control(type='text', formControlName='email', placeholder='Enter your email', pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", [ngClass]='{ "is-invalid": formSubmitted && lf.email.invalid, "is-valid": formSubmitted && !lf.email.invalid }', required)
+                    div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.email.invalid || lf.email.errors)")
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.email.errors.required") This is required
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.email.errors.pattern") It's not Email
                   .form-group
-                    input.form-control(type='password', formControlName='password', placeholder='Enter your password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": loginFormSubmitted && lf.password.invalid, "is-valid": loginFormSubmitted && !lf.password.invalid }', required)
+                    input.form-control(type='password', formControlName='password', placeholder='Enter your password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.password.invalid, "is-valid": formSubmitted && !lf.password.invalid }', required)
+                    div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.password.invalid || lf.password.errors)")
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.password.errors.required") This is required
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.password.errors.pattern") It's not password conditions
+                  .form-group
+                    input.form-control(type='password', formControlName='reenterPassword', placeholder='ReenterPassword your password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.reenterPassword.invalid, "is-valid": formSubmitted && !lf.reenterPassword.invalid }', required)
+                    div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.reenterPassword.invalid || lf.reenterPassword.errors)")
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.reenterPassword.errors.required") This is required
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="!lf.reenterPassword.errors.isMatching") It's not password Matching
+                  p.mb-0 Password conditions
+                  ul.font-weight-lighter(style="text-align: left;")
+                    li least one lower character
+                    li least one upper character
+                    li least one digit character
+                    li least one special character
+                    li least 8 characters
+
                   hr
                   .d-flex.justify-content-between.flex-sm-row.flex-column
                     a([routerLink]="['/pages/login']") Login
                     a.btn.btn-primary((click)='onSubmit()') Sign Up
+
+                  hr
+                  div
+                    a.btn.btn-warning((click)='signInWithGoogle()') Google Sign In
+                    a.btn.btn-info.mt-1((click)='signInWithFacebook()') Facebook Sign In
 ngx-spinner

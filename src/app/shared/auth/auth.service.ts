@@ -7,14 +7,18 @@ import { environment } from 'environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AlertsService } from 'app/widget/alerts/alerts.service';
 import { UserModel } from '../../page/profile/service/userModel';
+import { SocialAuthService } from 'angularx-social-login';
 
 @Injectable()
 export class AuthService {
   private apiUrl = environment.url;
   private auth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private verify: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private user: UserModel;
+  private oauth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
+    private socialAuthServ: SocialAuthService,
     private spinnerServ: NgxSpinnerService,
     private router: Router,
     private httpClient: HttpClient,
@@ -24,80 +28,133 @@ export class AuthService {
     if (admin !== null) {
       this.user = admin;
       this.auth.next(true);
+      this.verify.next(this.user.verify);
     }
 
     this.auth.subscribe(flag => {
       if (flag) {
-        this.router.navigate(['/page/info']);
+        if (this.user.verify) {
+          this.router.navigate(['/page/info']);
+        } else {
+          this.router.navigate(['/page/verifyEmail']);
+        }
       } else {
         this.router.navigate(['/']);
       }
     })
   }
 
-  signin(email: string, password: string) {
-    this.user = new UserModel();
-    this.user.email = email;
-    this.login({
-      body: {
-        email: email,
-        password: password
+  signup(email: string, password: string) {
+    this.spinnerServ.show();
+
+    this.httpClient.post(
+      this.apiUrl + 'auth/email/signup',
+      {
+        data: {
+          email: email,
+          password: password
+        }
       }
+    ).subscribe((resp: RespModel) => {
+
+      if (resp.code === 200) {
+        this.getInfo(resp);
+      } else {
+        this.alertsServ.errorMsg(resp.msg);
+        this.spinnerServ.hide();
+      }
+
+    }, err => {
+      this.auth.next(false);
+      this.alertsServ.errHttp(err);
+
+      this.spinnerServ.hide();
     });
+
+  }
+
+  setUser(user?: UserModel) {
+    if (!user) user = this.user;
+
+
+    localStorage.setItem(
+      'user', JSON.stringify(
+        {
+          email: user.email,
+          accessToken: user.accessToken || this.user.accessToken,
+          name: user.name,
+          verify: user.verify
+        }
+      )
+    );
+
+    this.verify.next(user.verify);
+    this.auth.next(true);
   }
 
   getUser() {
     return this.user;
   }
+  removeUser() {
+    this.user = null;
+    localStorage.removeItem('user');
+    this.auth.next(false);
+    this.oauth.next(false);
+  }
 
-  private login(req: ReqModel) {
+  oAuthSignIn(user) {
+    if (user) {
+
+      this.httpClient.post(
+        this.apiUrl + 'auth/oauth',
+        {
+          data: {
+            provider: user.provider,
+            email: user.email,
+            name: user.name,
+            accessToken: user.authToken,
+          }
+        }
+      ).subscribe((resp: RespModel) => {
+
+        if (resp.code === 200) {
+          this.user = resp.data.info
+          this.setUser();
+          this.oauth.next(true);
+        } else {
+          this.alertsServ.errorMsg(resp.msg);
+          this.spinnerServ.hide();
+        }
+
+      }, err => {
+        this.auth.next(false);
+        this.alertsServ.errHttp(err);
+
+        this.spinnerServ.hide();
+      });
+    }
+  }
+
+  login(email: string, password: string) {
     this.spinnerServ.show();
 
     this.httpClient.post(
       this.apiUrl + 'auth/email/login',
       {
-        data: req.body
+        data: {
+          email: email,
+          password: password
+        }
       }
     ).subscribe((resp: RespModel) => {
 
       if (resp.code === 200) {
-        this.httpClient.get(
-          this.apiUrl + 'user/info',
-          {
-            headers: {
-              'access-token': resp.data.info.accessToken
-            }
-          }
-        ).subscribe((response: RespModel) => {
-
-          if (response.code === 200) {
-            this.user = response.data.info;
-            this.user.accessToken = resp.data.info.accessToken;
-
-            localStorage.setItem('user', JSON.stringify({
-              email: this.user.email,
-              accessToken: resp.data.info.accessToken,
-              name: this.user.name
-            }));
-
-            this.auth.next(true);
-            this.spinnerServ.hide();
-
-          } else {
-            this.alertsServ.errorMsg(resp.msg);
-            this.spinnerServ.hide();
-
-          }
-        }, err => {
-          this.alertsServ.errHttp(err);
-
-          this.spinnerServ.hide();
-        })
-
+        this.getInfo(resp);
       } else {
         this.alertsServ.errorMsg(resp.msg);
         this.spinnerServ.hide();
       }
+
     }, err => {
       this.auth.next(false);
       this.alertsServ.errHttp(err);
@@ -106,13 +163,51 @@ export class AuthService {
     });
   }
 
-  logout() {
-    this.user = null;
-    localStorage.removeItem('user');
-    this.auth.next(false);
+  private getInfo(resp) {
+    this.httpClient.get(
+      this.apiUrl + 'user/info',
+      {
+        headers: {
+          'access-token': resp.data.info.accessToken
+        }
+      }
+    ).subscribe((response: RespModel) => {
+
+      if (response.code === 200) {
+        this.user = response.data.info;
+        this.user.accessToken = resp.data.info.accessToken;
+
+        this.setUser();
+
+        this.spinnerServ.hide();
+
+      } else {
+        this.alertsServ.errorMsg(resp.msg);
+        this.spinnerServ.hide();
+
+      }
+    }, err => {
+      this.alertsServ.errHttp(err);
+
+      this.spinnerServ.hide();
+    })
   }
 
-  isAuthenticated(): Observable<boolean> {
+  logout() {
+    if (this.oauth.value) {
+      this.socialAuthServ.signOut().then(() => {
+        this.removeUser();
+      })
+    } else {
+      this.removeUser();
+    }
+  }
+
+  isAuthenticated(): Observable<boolean> | any {
     return this.auth;
+  }
+
+  isVerify(): Observable<boolean> | any {
+    return this.verify;
   }
 }

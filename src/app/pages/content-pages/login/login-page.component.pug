@@ -12,11 +12,21 @@ section#login
                 h5.primary Login
                 form([formGroup]='loginForm')
                   .form-group
-                    input.form-control(type='text', formControlName='email', placeholder='Enter your email', pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", [ngClass]='{ "is-invalid": loginFormSubmitted && lf.email.invalid, "is-valid": loginFormSubmitted && !lf.email.invalid }', required)
+                    input.form-control(type='text', formControlName='email', placeholder='Enter your email', pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$", [ngClass]='{ "is-invalid": formSubmitted && lf.email.invalid, "is-valid": formSubmitted && !lf.email.invalid }', required)
+                    div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.email.invalid || lf.email.errors)")
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.email.errors?.required") This is required
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.email.errors?.pattern") It's not Email
                   .form-group
-                    input.form-control(type='password', formControlName='password', placeholder='Enter your password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": loginFormSubmitted && lf.password.invalid, "is-valid": loginFormSubmitted && !lf.password.invalid }', required)
+                    input.form-control(type='password', formControlName='password', placeholder='Enter your password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.password.invalid, "is-valid": formSubmitted && !lf.password.invalid }', required)
+                    div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.password.invalid || lf.password.errors)")
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.password.errors?.required") This is required
+                      i.ft-alert-circle.align-middle.d-block(*ngIf="lf.password.errors?.pattern") It's not password conditions
                   hr
                   .d-flex.justify-content-between.flex-sm-row.flex-column
                     a([routerLink]="['/pages/signup']") Sign Up
                     a.btn.btn-primary((click)='onSubmit()') Login
+                  hr
+                  div
+                    a.btn.btn-warning((click)='signInWithGoogle()') Google Sign In
+                    a.btn.btn-info.mt-1((click)='signInWithFacebook()') Facebook Sign In
 ngx-spinner

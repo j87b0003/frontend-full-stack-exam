@@ -22,7 +22,6 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('toggleIcon') toggleIcon: ElementRef;
   public menuItems: any[];
   level: number = 0;
-  logoUrl = 'assets/img/logos/daxin-vw.png';
   public config: any = {};
   protected innerWidth: any;
   layoutSub: Subscription;
@@ -89,16 +88,6 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     else if (this.config.layout.menuPosition === "Side") { // Vertical Menu{
       this.menuItems = ROUTES;
-    }
-
-
-
-
-    if (this.config.layout.sidebar.backgroundColor === 'white') {
-      this.logoUrl = 'assets/img/logo-dark.png';
-    }
-    else {
-      this.logoUrl = 'assets/img/logos/logo-big-white.png';
     }
 
     if(this.config.layout.sidebar.collapsed) {

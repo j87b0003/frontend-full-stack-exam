@@ -15,10 +15,19 @@ section.users-edit
                       .col-12.mt-1
                         .form-group
                           input.form-control(type='password', formControlName='oldPassword', placeholder='Enter old password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.oldPassword.invalid, "is-valid": formSubmitted && !lf.oldPassword.invalid }', required, minlength="8")
+                          div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.oldPassword.invalid || lf.oldPassword.errors)")
+                            i.ft-alert-circle.align-middle.d-block(*ngIf="lf.oldPassword.errors.required") This is required
+                            i.ft-alert-circle.align-middle.d-block(*ngIf="lf.oldPassword.errors.pattern") It's not password conditions
                         .form-group
                           input.form-control(type='password', formControlName='password', placeholder='Enter new password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.password.invalid, "is-valid": formSubmitted && !lf.password.invalid }', required, minlength="8")
+                          div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.password.invalid || lf.password.errors)")
+                            i.ft-alert-circle.align-middle.d-block(*ngIf="lf.password.errors.required") This is required
+                            i.ft-alert-circle.align-middle.d-block(*ngIf="lf.password.errors.pattern") It's not password conditions
                         .form-group
-                          input.form-control(type='password', formControlName='newPassword', placeholder='Reenter new password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.newPassword.invalid || (form.value.password !== form.value.newPassword), "is-valid": formSubmitted && !lf.newPassword.invalid && (form.value.password === form.value.newPassword)}', required, minlength="8")
+                          input.form-control(type='password', formControlName='reenterPassword', placeholder='Reenter new password', pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}", [ngClass]='{ "is-invalid": formSubmitted && lf.reenterPassword.invalid || (form.value.password !== form.value.reenterPassword), "is-valid": formSubmitted && !lf.reenterPassword.invalid && (form.value.password === form.value.reenterPassword)}', required, minlength="8")
+                          div.helper-block.mt-1.text-danger(*ngIf="formSubmitted && (lf.reenterPassword.invalid || lf.reenterPassword.errors)")
+                            i.ft-alert-circle.align-middle.d-block(*ngIf="lf.reenterPassword.errors.required") This is required
+                            i.ft-alert-circle.align-middle.d-block(*ngIf="!lf.reenterPassword.errors.isMatching") It's not password Matching
                       .col-12.d-flex.flex-sm-row.flex-column.justify-content-end.mt-3.mt-sm-2
                         app-btn-cancel((click)="reset()")
                         app-btn-save((click)='save()', [disabled]="form.invalid")

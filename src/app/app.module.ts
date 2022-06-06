@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { AngularFireModule } from "@angular/fire";
-
 import { NgbModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
-import { AgmCoreModule } from '@agm/core';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login'
 
 import {
   PerfectScrollbarModule,
@@ -23,6 +20,7 @@ import { FullLayoutComponent } from './layouts/full/full-layout.component';
 
 import { AuthService } from './shared/auth/auth.service';
 import { AuthGuard } from './shared/auth/auth-guard.service';
+import { VerifyEmailGuard } from './shared/auth/verifyEmail-guard.service';
 import { WINDOW_PROVIDERS } from './shared/services/window.service';
 
 import { AlertsService } from './widget/alerts/alerts.service';
@@ -30,17 +28,6 @@ import { AlertsComponent } from './widget/alerts/alerts.component';
 import { TagInputModule } from 'ngx-chips';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { QRCodeModule } from 'angularx-qrcode';
-
-var firebaseConfig = {
-  apiKey: "AIzaSyBIbMs4vnaUufly4DVF_kZo5EzVWkX6J1Y",
-  authDomain: "money-288102.firebaseapp.com",
-  databaseURL: "https://money-288102.firebaseio.com",
-  projectId: "money-288102",
-  storageBucket: "money-288102.appspot.com",
-  messagingSenderId: "383778290422",
-  appId: "1:383778290422:web:725b940b2b738fcf694ad7",
-  measurementId: "G-8RXLMNYE6S"
-};
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -54,25 +41,47 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(firebaseConfig),
     NgbModule,
     NgxSpinnerModule,
     DeviceDetectorModule.forRoot(),
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCRx1gY5vDhw-QBvcvNhTl3xq9rgFeDcHw'
-    }),
     PerfectScrollbarModule,
     TagInputModule,
     UiSwitchModule,
     QRCodeModule,
-    NgbTimepickerModule
+    NgbTimepickerModule,
+    SocialLoginModule
   ],
   providers: [
     AuthService,
     AuthGuard,
+    VerifyEmailGuard,
     AlertsService,
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
-    WINDOW_PROVIDERS
+    WINDOW_PROVIDERS,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '698276251613-1glhmoj5fhe68dnc2os7dsipuci78daq.apps.googleusercontent.com',
+              {
+                plugin_name: 'chat'
+              }
+            )
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('435266848018411')
+          }
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })

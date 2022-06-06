@@ -1,0 +1,12 @@
+section#error
+  .container-fluid
+    .row.auth-height.full-height-vh
+      .col-12.d-flex.align-items-center.justify-content-center
+        .row
+          .col-12.text-center
+            img.img-fluid.error-img.mt-2(src='assets/img/gallery/lock.png', alt, height='230', width='280')
+            h2.mt-4 Your email is confirmed.
+            .row
+                .col-12
+                    button.btn.btn-raised.btn-danger([routerLink]="['/pages/login']")
+                        span Login

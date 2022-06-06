@@ -1,4 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
+import { VerifyEmailGuard } from '../auth/verifyEmail-guard.service';
 
 //Route for content layout with sidebar, navbar and footer.
 

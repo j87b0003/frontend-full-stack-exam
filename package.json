@@ -33,6 +33,7 @@
     "acorn": "8.0.4",
     "angular-resize-event": "^2.0.0",
     "angularx-qrcode": "^10.0.11",
+    "angularx-social-login": "^3.5.7",
     "bootstrap": "4.5.2",
     "chartist": "^0.11.4",
     "classlist.js": "1.1.20150312",

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ConfirmEmailComponent } from './confirmEmail/confirmEmail.component';
 
 import { ErrorPageComponent } from "./error/error-page.component";
 import { LoginPageComponent } from "./login/login-page.component";
@@ -9,6 +10,13 @@ const routes: Routes = [
   {
     path: '',
     children: [
+      {
+        path: 'confirmEmail',
+        component: ConfirmEmailComponent,
+        data: {
+          title: 'Confirm Email Page'
+        }
+      },
       {
         path: 'error',
         component: ErrorPageComponent,

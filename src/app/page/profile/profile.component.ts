@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   form = new FormGroup({
     oldPassword: new FormControl(undefined, ValidatorModel.required()),
     password: new FormControl(undefined, ValidatorModel.required()),
-    newPassword: new FormControl(undefined, ValidatorModel.required([this.matchValidator('password')]))
+    reenterPassword: new FormControl(undefined, ValidatorModel.required([this.matchValidator('password')]))
   });
   admin: UserModel;
 

@@ -9,7 +9,7 @@ import { UserGetRespModel, UserModel } from '../profile/service/userModel';
   templateUrl: './info.component.pug',
   styleUrls: ['./info.component.scss']
 })
-export class InfoComponent implements OnInit {
+export class InfoComponent{
   user: UserModel;
 
   constructor(
@@ -32,7 +32,5 @@ export class InfoComponent implements OnInit {
         this.alertsServ.errHttp(err);
       })
   }
-
-  ngOnInit() { }
 
 }

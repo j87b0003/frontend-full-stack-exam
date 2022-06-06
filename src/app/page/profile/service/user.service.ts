@@ -42,7 +42,7 @@ export class UserService {
 
   sendVerifyEmail(): Observable<any> {
     return this.httpClient.get(
-      environment.url + 'user/resetPassword',
+      environment.url + 'user/sendVerifyEmail',
       {
         headers: {
           'access-token': this.authServ.getUser().accessToken
